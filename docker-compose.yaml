@@ -1,0 +1,7 @@
+version: "3.4"
+
+services:
+  gnatsd:
+    image: nats-streaming:latest
+    ports:
+    - 4222:4222
