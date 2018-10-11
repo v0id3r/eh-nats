@@ -3,7 +3,7 @@
 Eventbus with NATS/NATS Streaming backend for https://github.com/looplab/eventhorizon
 
 ## Example init
-### Connection details
+### Connection configuration
 ```
 natsUrl := "nats://localhost:4222"
 subject := "ehBus"
@@ -19,7 +19,7 @@ or
 ```
 conn, err := stan.Connect(clusterId, clientId, stan.NatsURL(natsUrl))
 ```
-### Create bus with created connection
+### Create bus using connection
 ```
 eventBus, err := nats.NewEventBus(conn, subject)
 ```
