@@ -1,13 +1,27 @@
+// Copyright 2018 - Alexey Karnov (void.alexey@gmail.com)
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package nats
 
 import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/globalsign/mgo/bson"
-	"github.com/nats-io/go-nats-streaming"
 	"sync"
 	"time"
+
+	"github.com/globalsign/mgo/bson"
 
 	eh "github.com/looplab/eventhorizon"
 )
@@ -68,19 +82,19 @@ func (e Error) Error() string {
 }
 
 type EventBus struct {
-	conn 			stan.Conn
-	subjectPrefix 	string
-	registered   	map[eh.EventHandlerType]struct{}
-	registeredMu 	sync.RWMutex
-	errCh        	chan Error
+	conn          stan.Conn
+	subjectPrefix string
+	registered    map[eh.EventHandlerType]struct{}
+	registeredMu  sync.RWMutex
+	errCh         chan Error
 }
 
 func NewEventBus(nc stan.Conn, subjectPrefix string) (*EventBus, error) {
 	return &EventBus{
-		conn: nc,
+		conn:          nc,
 		subjectPrefix: subjectPrefix,
-		registered:         map[eh.EventHandlerType]struct{}{},
-		errCh:              make(chan Error, 100),
+		registered:    map[eh.EventHandlerType]struct{}{},
+		errCh:         make(chan Error, 100),
 	}, nil
 }
 
@@ -91,17 +105,17 @@ type Event struct {
 	AggregateID   eh.UUID
 	Version       int
 	Context       map[string]interface{}
-	RawData       *bson.Raw					`bson:",omitempty"`
+	RawData       *bson.Raw `bson:",omitempty"`
 }
 
 func (b *EventBus) PublishEvent(ctx context.Context, event eh.Event) error {
 	wireEvent := &Event{
-		EventType: event.EventType(),
+		EventType:     event.EventType(),
 		AggregateType: event.AggregateType(),
-		AggregateID: event.AggregateID(),
-		Version: event.Version(),
-		Timestamp: event.Timestamp(),
-		Context: eh.MarshalContext(ctx),
+		AggregateID:   event.AggregateID(),
+		Version:       event.Version(),
+		Timestamp:     event.Timestamp(),
+		Context:       eh.MarshalContext(ctx),
 	}
 
 	if event.Data() != nil {
@@ -214,7 +228,6 @@ func (b *EventBus) subscription(m eh.EventMatcher, h eh.EventHandler, observer b
 		panic(fmt.Sprintf("multiple registrations for %s", h.HandlerType()))
 	}
 	b.registered[h.HandlerType()] = struct{}{}
-
 
 	handlerType := string(h.HandlerType())
 
