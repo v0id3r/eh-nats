@@ -24,35 +24,8 @@ import (
 	"github.com/globalsign/mgo/bson"
 
 	eh "github.com/looplab/eventhorizon"
+	"github.com/nats-io/go-nats-streaming"
 )
-
-//wg := sync.WaitGroup{}
-//wg.Add(1)
-//
-//errc := make(chan error, 1)
-//
-//nc, err := nats.Connect(natsUrl,
-//	nats.ClosedHandler(func(_ *nats.Conn) {
-//		wg.Done()
-//	}),
-//	nats.ErrorHandler(func(_ *nats.Conn, _ *nats.Subscription, err error) {
-//		errc <- err
-//	}),
-//	nats.DrainTimeout(10 * time.Second),
-//)
-//if err != nil {
-//	t.Error(err)
-//}
-//c, err := stan.Connect(clusterId, clientId, stan.NatsConn(nc))
-//if err != nil {
-//	t.Error(err)
-//}
-//
-//if err := nc.Drain(); err != nil {
-//	t.Error(err)
-//}
-//
-//wg.Wait()
 
 // ErrCouldNotMarshalEvent is when an event could not be marshaled into BSON.
 func ErrCouldNotMarshalEvent(err error) error {
