@@ -19,8 +19,8 @@ import (
 
 	eh "github.com/looplab/eventhorizon"
 	"github.com/looplab/eventhorizon/eventbus"
-	"github.com/nats-io/go-nats-streaming"
-	"github.com/nats-io/go-nats"
+	nats "github.com/nats-io/nats.go"
+	stan "github.com/nats-io/stan.go"
 )
 
 func TestEventBus(t *testing.T) {
